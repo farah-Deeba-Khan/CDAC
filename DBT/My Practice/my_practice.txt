@@ -1,0 +1,345 @@
+mysql> select *, rollno * 10 as newroll from prac1;
++--------+------------+--------+------------+---------+
+| name   | dob        | rollno | city       | newroll |
++--------+------------+--------+------------+---------+
+| Rahul  | 1995-08-15 |    101 | Mumbai     |    1010 |
+| Priya  | 2000-01-12 |    102 | Delhi      |    1020 |
+| Vikram | 1998-07-05 |    103 | Bengaluru  |    1030 |
+| Meena  | 1999-03-23 |    104 | Chennai    |    1040 |
+| Rohan  | 1997-10-02 |    105 | Pune       |    1050 |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |    1060 |
+| Kabir  | 1995-12-25 |    107 | Ahmedabad  |    1070 |
+| Sneha  | 2001-11-14 |    108 | Jaipur     |    1080 |
+| Arjun  | 1994-04-30 |    109 | Kolkata    |    1090 |
+| Simran | 1993-09-19 |    110 | Chandigarh |    1100 |
+| Amit   | 1994-06-11 |    111 | Pune       |    1110 |
+| Ritika | 1997-09-09 |    112 | Mumbai     |    1120 |
+| Arjun  | 1998-12-25 |    113 | Jaipur     |    1130 |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |    1060 |
+| Vikram | 1995-08-01 |    103 | Bengaluru  |    1030 |
+| Neha   | 2001-03-17 |    114 | Delhi      |    1140 |
+| Rohan  | 1997-10-02 |    105 | Mumbai     |    1050 |
+| Kabir  | 1995-12-25 |    106 | Ahmedabad  |    1060 |
++--------+------------+--------+------------+---------+
+18 rows in set (0.01 sec)
+
+mysql> select * from prac1 limit 5;
++--------+------------+--------+-----------+
+| name   | dob        | rollno | city      |
++--------+------------+--------+-----------+
+| Rahul  | 1995-08-15 |    101 | Mumbai    |
+| Priya  | 2000-01-12 |    102 | Delhi     |
+| Vikram | 1998-07-05 |    103 | Bengaluru |
+| Meena  | 1999-03-23 |    104 | Chennai   |
+| Rohan  | 1997-10-02 |    105 | Pune      |
++--------+------------+--------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from prac1 limit 4,5;
++-------+------------+--------+-----------+
+| name  | dob        | rollno | city      |
++-------+------------+--------+-----------+
+| Rohan | 1997-10-02 |    105 | Pune      |
+| Aisha | 1996-05-20 |    106 | Hyderabad |
+| Kabir | 1995-12-25 |    107 | Ahmedabad |
+| Sneha | 2001-11-14 |    108 | Jaipur    |
+| Arjun | 1994-04-30 |    109 | Kolkata   |
++-------+------------+--------+-----------+
+5 rows in set (0.00 sec)
+
+
+mysql> insert into prac2 select * from prac1;
+Query OK, 18 rows affected (0.01 sec)
+Records: 18  Duplicates: 0  Warnings: 0
+
+mysql> select * from prac2;
++--------+------------+--------+------------+
+| name   | dob        | rollno | city       |
++--------+------------+--------+------------+
+| Rahul  | 1995-08-15 |    101 | Mumbai     |
+| Priya  | 2000-01-12 |    102 | Delhi      |
+| Vikram | 1998-07-05 |    103 | Bengaluru  |
+| Meena  | 1999-03-23 |    104 | Chennai    |
+| Rohan  | 1997-10-02 |    105 | Pune       |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Kabir  | 1995-12-25 |    107 | Ahmedabad  |
+| Sneha  | 2001-11-14 |    108 | Jaipur     |
+| Arjun  | 1994-04-30 |    109 | Kolkata    |
+| Simran | 1993-09-19 |    110 | Chandigarh |
+| Amit   | 1994-06-11 |    111 | Pune       |
+| Ritika | 1997-09-09 |    112 | Mumbai     |
+| Arjun  | 1998-12-25 |    113 | Jaipur     |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Vikram | 1995-08-01 |    103 | Bengaluru  |
+| Neha   | 2001-03-17 |    114 | Delhi      |
+| Rohan  | 1997-10-02 |    105 | Mumbai     |
+| Kabir  | 1995-12-25 |    106 | Ahmedabad  |
++--------+------------+--------+------------+
+18 rows in set (0.00 sec)
+
+mysql> create table prac3(name varchar(20), dob date, city varchar(10), rollno int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into prac3 select name, dob, city, rollno from prac2;
+Query OK, 18 rows affected (0.01 sec)
+Records: 18  Duplicates: 0  Warnings: 0
+
+mysql> select * from prac3;
++--------+------------+------------+--------+
+| name   | dob        | city       | rollno |
++--------+------------+------------+--------+
+| Rahul  | 1995-08-15 | Mumbai     |    101 |
+| Priya  | 2000-01-12 | Delhi      |    102 |
+| Vikram | 1998-07-05 | Bengaluru  |    103 |
+| Meena  | 1999-03-23 | Chennai    |    104 |
+| Rohan  | 1997-10-02 | Pune       |    105 |
+| Aisha  | 1996-05-20 | Hyderabad  |    106 |
+| Kabir  | 1995-12-25 | Ahmedabad  |    107 |
+| Sneha  | 2001-11-14 | Jaipur     |    108 |
+| Arjun  | 1994-04-30 | Kolkata    |    109 |
+| Simran | 1993-09-19 | Chandigarh |    110 |
+| Amit   | 1994-06-11 | Pune       |    111 |
+| Ritika | 1997-09-09 | Mumbai     |    112 |
+| Arjun  | 1998-12-25 | Jaipur     |    113 |
+| Aisha  | 1996-05-20 | Hyderabad  |    106 |
+| Vikram | 1995-08-01 | Bengaluru  |    103 |
+| Neha   | 2001-03-17 | Delhi      |    114 |
+| Rohan  | 1997-10-02 | Mumbai     |    105 |
+| Kabir  | 1995-12-25 | Ahmedabad  |    106 |
++--------+------------+------------+--------+
+18 rows in set (0.00 sec)
+
+mysql> create table prac4 as select * from prac1;
+Query OK, 18 rows affected (0.04 sec)
+Records: 18  Duplicates: 0  Warnings: 0
+
+mysql> select * from prac4;
++--------+------------+--------+------------+
+| name   | dob        | rollno | city       |
++--------+------------+--------+------------+
+| Rahul  | 1995-08-15 |    101 | Mumbai     |
+| Priya  | 2000-01-12 |    102 | Delhi      |
+| Vikram | 1998-07-05 |    103 | Bengaluru  |
+| Meena  | 1999-03-23 |    104 | Chennai    |
+| Rohan  | 1997-10-02 |    105 | Pune       |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Kabir  | 1995-12-25 |    107 | Ahmedabad  |
+| Sneha  | 2001-11-14 |    108 | Jaipur     |
+| Arjun  | 1994-04-30 |    109 | Kolkata    |
+| Simran | 1993-09-19 |    110 | Chandigarh |
+| Amit   | 1994-06-11 |    111 | Pune       |
+| Ritika | 1997-09-09 |    112 | Mumbai     |
+| Arjun  | 1998-12-25 |    113 | Jaipur     |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Vikram | 1995-08-01 |    103 | Bengaluru  |
+| Neha   | 2001-03-17 |    114 | Delhi      |
+| Rohan  | 1997-10-02 |    105 | Mumbai     |
+| Kabir  | 1995-12-25 |    106 | Ahmedabad  |
++--------+------------+--------+------------+
+18 rows in set (0.00 sec)
+
+
+mysql> select * from prac1 order by city;
++--------+------------+--------+------------+
+| name   | dob        | rollno | city       |
++--------+------------+--------+------------+
+| Kabir  | 1995-12-25 |    107 | Ahmedabad  |
+| Kabir  | 1995-12-25 |    106 | Ahmedabad  |
+| Vikram | 1998-07-05 |    103 | Bengaluru  |
+| Vikram | 1995-08-01 |    103 | Bengaluru  |
+| Simran | 1993-09-19 |    110 | Chandigarh |
+| Meena  | 1999-03-23 |    104 | Chennai    |
+| Priya  | 2000-01-12 |    102 | Delhi      |
+| Neha   | 2001-03-17 |    114 | Delhi      |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Aisha  | 1996-05-20 |    106 | Hyderabad  |
+| Sneha  | 2001-11-14 |    108 | Jaipur     |
+| Arjun  | 1998-12-25 |    113 | Jaipur     |
+| Arjun  | 1994-04-30 |    109 | Kolkata    |
+| Rahul  | 1995-08-15 |    101 | Mumbai     |
+| Ritika | 1997-09-09 |    112 | Mumbai     |
+| Rohan  | 1997-10-02 |    105 | Mumbai     |
+| Rohan  | 1997-10-02 |    105 | Pune       |
+| Amit   | 1994-06-11 |    111 | Pune       |
++--------+------------+--------+------------+
+18 rows in set (0.01 sec)
+
+mysql> select name,
+    -> case
+    -> when rollno = 101 then 1000
+    -> when rollno = 108 then 1008
+    -> else 2000
+    -> end
+    -> as updatedrollno
+    -> from prac1;
++--------+---------------+
+| name   | updatedrollno |
++--------+---------------+
+| Rahul  |          1000 |
+| Priya  |          2000 |
+| Vikram |          2000 |
+| Meena  |          2000 |
+| Rohan  |          2000 |
+| Aisha  |          2000 |
+| Kabir  |          2000 |
+| Sneha  |          1008 |
+| Arjun  |          2000 |
+| Simran |          2000 |
+| Amit   |          2000 |
+| Ritika |          2000 |
+| Arjun  |          2000 |
+| Aisha  |          2000 |
+| Vikram |          2000 |
+| Neha   |          2000 |
+| Rohan  |          2000 |
+| Kabir  |          2000 |
++--------+---------------+
+18 rows in set (0.00 sec)
+
+ select substring(name, -5) from prac1;
+
+
+mysql> select name, instr(name, 'r'), substring(name, instr(name, 'r')+1) from prac1;
+
+
+mysql> select * from prac7;
++--------+--------+------+
+| name   | rollno | city |
++--------+--------+------+
+| farah  |    101 | NULL |
+| anchal |    102 | NULL |
+| dipesh |    103 | NULL |
+| ayush  |    104 | NULL |
++--------+--------+------+
+4 rows in set (0.00 sec)
+
+mysql> select name, isnull(name) form prac;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prac' at line 1
+mysql> select name, isnull(name) form prac7;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prac7' at line 1
+mysql> select name, isnull(name) from prac7;
++--------+--------------+
+| name   | isnull(name) |
++--------+--------------+
+| farah  |            0 |
+| anchal |            0 |
+| dipesh |            0 |
+| ayush  |            0 |
++--------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, isnull(city) from prac7;
++--------+--------------+
+| name   | isnull(city) |
++--------+--------------+
+| farah  |            1 |
+| anchal |            1 |
+| dipesh |            1 |
+| ayush  |            1 |
++--------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select city, isnull(city) from prac7;
++------+--------------+
+| city | isnull(city) |
++------+--------------+
+| NULL |            1 |
+| NULL |            1 |
+| NULL |            1 |
+| NULL |            1 |
++------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, rollno, city, ifnull(city, 0) from prac7;
++--------+--------+------+-----------------+
+| name   | rollno | city | ifnull(city, 0) |
++--------+--------+------+-----------------+
+| farah  |    101 | NULL | 0               |
+| anchal |    102 | NULL | 0               |
+| dipesh |    103 | NULL | 0               |
+| ayush  |    104 | NULL | 0               |
++--------+--------+------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, rollno, city, ifnull(name, 0) from prac7;
++--------+--------+------+-----------------+
+| name   | rollno | city | ifnull(name, 0) |
++--------+--------+------+-----------------+
+| farah  |    101 | NULL | farah           |
+| anchal |    102 | NULL | anchal          |
+| dipesh |    103 | NULL | dipesh          |
+| ayush  |    104 | NULL | ayush           |
++--------+--------+------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, rollno, city, nullif(a, a) from prac7;
+ERROR 1054 (42S22): Unknown column 'a' in 'field list'
+mysql> select name, rollno, city, nullif('a', 'a') from prac7;
++--------+--------+------+------------------+
+| name   | rollno | city | nullif('a', 'a') |
++--------+--------+------+------------------+
+| farah  |    101 | NULL | NULL             |
+| anchal |    102 | NULL | NULL             |
+| dipesh |    103 | NULL | NULL             |
+| ayush  |    104 | NULL | NULL             |
++--------+--------+------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, rollno, city, nullif('f', 'a') from prac7;
++--------+--------+------+------------------+
+| name   | rollno | city | nullif('f', 'a') |
++--------+--------+------+------------------+
+| farah  |    101 | NULL | f                |
+| anchal |    102 | NULL | f                |
+| dipesh |    103 | NULL | f                |
+| ayush  |    104 | NULL | f                |
++--------+--------+------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, rollno, city, nullif('r', 'a') from prac7;
++--------+--------+------+------------------+
+| name   | rollno | city | nullif('r', 'a') |
++--------+--------+------+------------------+
+| farah  |    101 | NULL | r                |
+| anchal |    102 | NULL | r                |
+| dipesh |    103 | NULL | r                |
+| ayush  |    104 | NULL | r                |
++--------+--------+------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select name nullif('r', 'a') from prac7;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '('r', 'a') from prac7' at line 1
+mysql> select name, nullif('r', 'a') from prac7;
++--------+------------------+
+| name   | nullif('r', 'a') |
++--------+------------------+
+| farah  | r                |
+| anchal | r                |
+| dipesh | r                |
+| ayush  | r                |
++--------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select nullif('r', 'a') from prac7;
++------------------+
+| nullif('r', 'a') |
++------------------+
+| r                |
+| r                |
+| r                |
+| r                |
++------------------+
+4 rows in set (0.00 sec)
+
+mysql> select nullif(null, 'a') from prac7;
++-------------------+
+| nullif(null, 'a') |
++-------------------+
+|              NULL |
+|              NULL |
+|              NULL |
+|              NULL |
++-------------------+
+4 rows in set (0.00 sec)
+
+mysql>
