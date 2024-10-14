@@ -1,0 +1,84 @@
+SQL Exercise 5
+1. Display the Supplier name and the Quantity sold.
+
+SELECT S.SupplierName, SUM(Sales.Quantity) AS QuantitySold
+FROM Suppliers S
+JOIN Sales ON S.SupplierID = Sales.SupplierID
+GROUP BY S.SupplierName;
+
+2. Display the Part name and Quantity sold.
+
+SELECT P.PartName, SUM(Sales.Quantity) AS QuantitySold
+FROM Parts P
+JOIN Sales ON P.PartID = Sales.PartID
+GROUP BY P.PartName;
+
+3. Display the Project name and Quantity sold.
+
+SELECT Pr.ProjectName, SUM(Sales.Quantity) AS QuantitySold
+FROM Projects Pr
+JOIN Sales ON Pr.ProjectID = Sales.ProjectID
+GROUP BY Pr.ProjectName;
+
+
+4. Display the Supplier name, Part name, Project name and Quantity sold.
+
+SELECT S.SupplierName, P.PartName, Pr.ProjectName, SUM(Sales.Quantity) AS QuantitySold
+FROM Suppliers S
+JOIN Sales ON S.SupplierID = Sales.SupplierID
+JOIN Parts P ON Sales.PartID = P.PartID
+JOIN Projects Pr ON Sales.ProjectID = Pr.ProjectID
+GROUP BY S.SupplierName, P.PartName, Pr.ProjectName;
+
+5. Display the Supplier name, Supplying Parts to a Project in the same City.
+
+SELECT DISTINCT S.SupplierName
+FROM Suppliers S
+JOIN Sales ON S.SupplierID = Sales.SupplierID
+JOIN Projects Pr ON Sales.ProjectID = Pr.ProjectID
+WHERE S.City = Pr.City;
+
+6. Display the Part name that is ‘Red’ is color, and the Quantity sold.
+
+SELECT P.PartName, SUM(Sales.Quantity) AS QuantitySold
+FROM Parts P
+JOIN Sales ON P.PartID = Sales.PartID
+WHERE P.Color = 'Red'
+GROUP BY P.PartName;
+
+7. Display all the Quantity sold by Suppliers with the Status = 20.
+
+SELECT SUM(Sales.Quantity) AS TotalQuantitySold
+FROM Suppliers S
+JOIN Sales ON S.SupplierID = Sales.SupplierID
+WHERE S.Status = 20;
+
+8. Display all the Parts and Quantity with a Weight > 14.
+
+SELECT P.PartName, SUM(Sales.Quantity) AS QuantitySold
+FROM Parts P
+JOIN Sales ON P.PartID = Sales.PartID
+WHERE P.Weight > 14
+GROUP BY P.PartName;
+
+9. Display all the Project names and City, which has bought more than 500 Parts.
+
+SELECT Pr.ProjectName, Pr.City
+FROM Projects Pr
+JOIN Sales ON Pr.ProjectID = Sales.ProjectID
+GROUP BY Pr.ProjectName, Pr.City
+HAVING SUM(Sales.Quantity) > 500;
+
+10. Display all the Part names and Quantity sold that have a Weight less than 15.
+
+SELECT P.PartName, SUM(Sales.Quantity) AS QuantitySold
+FROM Parts P
+JOIN Sales ON P.PartID = Sales.PartID
+WHERE P.Weight < 15
+GROUP BY P.PartName;
+
+11. Display all the Employee names and the name of their Managers. 
+
+SELECT E.EmployeeName, M.EmployeeName AS ManagerName
+FROM Employees E
+LEFT JOIN Employees M ON E.ManagerID = M.EmployeeID;

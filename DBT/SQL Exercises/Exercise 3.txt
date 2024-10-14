@@ -1,0 +1,61 @@
+SQL Exercise 3
+1. Display all the Supplier names with the initial letter capital.
+
+SELECT CONCAT(UPPER(LEFT(SupplierName, 1)), LOWER(SUBSTRING(SupplierName, 2))) AS CapitalizedName
+FROM Suppliers;
+
+2. Display all the Supplier names in upper case.
+
+SELECT UPPER(SupplierName) AS UpperCaseName
+FROM Suppliers;
+
+3. Display all the Supplier names in lower case.
+
+SELECT LOWER(SupplierName) AS LowerCaseName
+FROM Suppliers;
+
+
+4. Display all the Supplier names padded to 25 characters, with spaces on the left.
+
+SELECT LPAD(SupplierName, 25) AS PaddedName
+FROM Suppliers;
+
+5. Display all the Supplier names (with ‘la’ replaced by ‘ro’).
+ HINT: REPLACE.
+
+SELECT REPLACE(SupplierName, 'la', 'ro') AS ReplacedName
+FROM Suppliers;
+
+6. Implement the above command such that ‘l’ is replaced with ‘r’ and ‘a’ is replaced
+with ‘o’.
+
+SELECT REPLACE(REPLACE(SupplierName, 'l', 'r'), 'a', 'o') AS DoubleReplacedName
+FROM Suppliers;
+
+7. Display the Supplier names and the lengths of the names.
+
+SELECT SupplierName, LENGTH(SupplierName) AS NameLength
+FROM Suppliers;
+
+8. Use the soundex function to search for a supplier by the name of ‘BLOKE’.
+
+SELECT SupplierName
+FROM Suppliers
+WHERE SOUNDEX(SupplierName) = SOUNDEX('BLOKE');
+
+
+9. Display the Supplier name and the status (as Ten, Twenty, Thirty, etc.).
+
+SELECT SupplierName,
+       CASE 
+           WHEN OrderAmount < 10 THEN 'Ten'
+           WHEN OrderAmount < 20 THEN 'Twenty'
+           WHEN OrderAmount < 30 THEN 'Thirty'
+           ELSE 'More than Thirty'
+       END AS Status
+FROM Suppliers;
+
+
+10. Display the current day (e.g. Thursday).
+
+SELECT DAYNAME(CURDATE()) AS CurrentDay;
