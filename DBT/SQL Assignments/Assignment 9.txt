@@ -1,0 +1,66 @@
+Assignment – 9
+Querying Multiple Tables at Once.
+1) Write a query that lists each order number followed by the name of the customer
+who made the order.
+Ans. mysql> select orders.onum, customers.cname from customers inner join orders on customers.cnum = orders.cnum;
+
++------+----------+
+| onum | cname    |
++------+----------+
+| 3001 | Cisneros |
+| 3002 | Pereira  |
+| 3003 | Hoffman  |
+| 3005 | Liu      |
+| 3006 | Cisneros |
+| 3007 | Grass    |
+| 3008 | Clemens  |
+| 3009 | Giovanni |
+| 3010 | Grass    |
+| 3011 | Clemens  |
++------+----------+
+
+2) Write a query that gives the names of both the salesperson and the customer for each order along with the order number.
+
+mysql> select salespeople.sname, customers.cname, orders.onum from orders inner join customers on customers.cnum = orders.cnum inner join salespeople on salespeople.snum = orders.snum;
++---------+----------+------+
+| sname   | cname    | onum |
++---------+----------+------+
+| Rifkin  | Cisneros | 3001 |
+| Motika  | Pereira  | 3002 |
+| Peel    | Hoffman  | 3003 |
+| Serres  | Liu      | 3005 |
+| Rifkin  | Cisneros | 3006 |
+| Serres  | Grass    | 3007 |
+| Peel    | Clemens  | 3008 |
+| Axelrod | Giovanni | 3009 |
+| Serres  | Grass    | 3010 |
+| Peel    | Clemens  | 3011 |
++---------+----------+------+
+
+3) Write a query that produces all customers serviced by salespeople with a
+commission above 12%. Output the customer’s name, the salesperson’s name,
+and the salesperson’s rate of commission.
+
+Ans. mysql> select customers.cname, salespeople.sname, salespeople.comm from customers inner join salespeople on customers.snum = salespeople.snum where salespeople.comm > 0.12;
++----------+--------+------+
+| cname    | sname  | comm |
++----------+--------+------+
+| Liu      | Serres | 0.13 |
+| Grass    | Serres | 0.13 |
+| Cisneros | Rifkin | 0.15 |
++----------+--------+------+
+
+4) Write a query that calculates the amount of the salesperson’s commission on each
+order by a customer with a rating above 100.
+
+mysql> select salespeople.sname, customers.cname, customers.rating, orders.amt * salespeople.comm as sales_person_amt from orders inner join salespeople on orders.snum = salespeople.snum inner join customers on customers.cnum = orders.cnum where customers.rating > 100;
++---------+----------+--------+------------------+
+| sname   | cname    | rating | sales_person_amt |
++---------+----------+--------+------------------+
+| Rifkin  | Cisneros |    300 |             2.80 |
+| Serres  | Liu      |    200 |           670.86 |
+| Rifkin  | Cisneros |    300 |           164.72 |
+| Serres  | Grass    |    300 |             9.85 |
+| Axelrod | Giovanni |    200 |           171.32 |
+| Serres  | Grass    |    300 |           170.29 |
++---------+----------+--------+------------------+
