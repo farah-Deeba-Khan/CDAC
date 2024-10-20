@@ -1,0 +1,38 @@
+Query perfomance-
+
+mysql> explain format = json select * from employee order by income desc limit 1 offset 2;
+
+__________
+Output - 
+__________
+
+"query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "0.95"
+    },
+____________________________
+check = "query_cost": "0.95
+____________________________
+
+mysql> explain format = json select * from employee where income < (select max(income) from employee);
+
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "0.95"
+    },
+____________________________
+check = "query_cost": "0.95
+____________________________
+
+* Here for both queries query cost is same so there performance is same
+but if one of them is higher like 2.35 then the other which is lesser than 2.35 that query performance will considered good. 
+
+Query Cost- 
+* Query cost depends on-
+	- machine settings
+	- MySQL version
+	- optimization settings
+* Lower the query cost means more efficient query.

@@ -1,0 +1,541 @@
+_______________
+Derived Table
+_______________
+
+* find the max of avg income per name
+
+___________
+Views
+___________
+
+View are logical views doesn't have its own memory.
+
+syntax: CREATE VIEW viewname AS SELECT ....;
+
+CREATE VIEW  v1_jobsal AS SELECT job, AVG(sal) avgsal FROM emp GROUP BY job;
+
+View is based on SELECT statement.
+
+AS keyword -> is compulsory here, it'not for alias. it is a part of the view syntax.
+
+* VIEWS are not materialized - the data is not copied or stored. Its just a view of a data.
+ex - from our window we can see building, if we change window then view changes. Just a view whether a front view, back view etc.
+ 
+* Data of view is not stored on server hard-disk, but its select statement is stored in compiled form. it speed up execution of view.
+(means select query is stored into the server side - by this query execution speeds up).
+
+mysql> create view v1_incsal as select name, avg(income) avginc fr
+om employee group by name;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++--------------+
+| Tables_in_db |
++--------------+
+| employee     |
+| prac1        |
+| prac2        |
+| prac3        |
+| prac7        |
+| v1_incsal    |
++--------------+
+
+
+
+mysql> desc v1_incsal;
++--------+---------------+------+-----+---------+-------+
+| Field  | Type          | Null | Key | Default | Extra |
++--------+---------------+------+-----+---------+-------+
+| name   | varchar(50)   | NO   |     | NULL    |       |
+| avginc | decimal(11,6) | YES  |     | NULL    |       |
++--------+---------------+------+-----+---------+-------+
+
+we can see the view;
+it has been stored in somewhere inside in database unless we drop it.
+we can perform operations on view.
+
+mysql> 
++--------+--------------+
+| name   | avginc       |
++--------+--------------+
+| Anchal | 60000.000000 |
+| Farah  | 50000.000000 |
+| Jane   | 55000.000000 |
+| John   | 45000.000000 |
+| Mike   | 70000.000000 |
+| Naira  | 80000.000000 |
+| Tom    | 30000.000000 |
++--------+--------------+
+
+operations on view-
+
+mysql> select * from v1_incsal order by avginc desc;
++--------+--------------+
+| name   | avginc       |
++--------+--------------+
+| Naira  | 80000.000000 |
+| Mike   | 70000.000000 |
+| Anchal | 60000.000000 |
+| Jane   | 55000.000000 |
+| Farah  | 50000.000000 |
+| John   | 45000.000000 |
+| Tom    | 30000.000000 |
++--------+--------------+
+
+
+mysql> select max(avginc) from v1_incsal;
++--------------+
+| max(avginc)  |
++--------------+
+| 80000.000000 |
++--------------+
+
+___________________________________
+Creating another view of same table
+___________________________________
+
+mysql> create view view2 as select * from employee;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view2;
++----+--------+----------+
+| id | name   | income   |
++----+--------+----------+
+|  1 | Farah  | 50000.00 |
+|  2 | Anchal | 60000.00 |
+|  3 | John   | 45000.00 |
+|  4 | Jane   | 55000.00 |
+|  5 | Mike   | 70000.00 |
+|  7 | Tom    | 30000.00 |
+|  8 | Naira  | 80000.00 |
++----+--------+----------+
+
+
+___________________________
+can create Limited column
+___________________________
+
+mysql> create view view4 as select name, income from employee;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view4;
++--------+----------+
+| name   | income   |
++--------+----------+
+| Farah  | 50000.00 |
+| Anchal | 60000.00 |
+| John   | 45000.00 |
+| Jane   | 55000.00 |
+| Mike   | 70000.00 |
+| Tom    | 30000.00 |
+| Naira  | 80000.00 |
++--------+----------+
+
+
+_____________________________
+can add computed column also
+_____________________________
+
+when we create view with a computed column it will add in that particular view.
+
+mysql> create view v7 as select id, name, income, comm, income + IFNULL(comm, 0.0) sal from employee;
+                                                                                                    Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from v7;
++----+--------+----------+---------+----------+
+| id | name   | income   | comm    | sal      |
++----+--------+----------+---------+----------+
+|  1 | Farah  | 50000.00 | 5000.00 | 55000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 | 66000.00 |
+|  3 | John   | 45000.00 | 4000.00 | 49000.00 |
+|  4 | Jane   | 55000.00 | 4500.00 | 59500.00 |
+|  5 | Mike   | 70000.00 | 7000.00 | 77000.00 |
+|  7 | Tom    | 30000.00 | 3000.00 | 33000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 | 88000.00 |
++----+--------+----------+---------+----------+
+7 rows in set (0.00 sec)
+
+
+mysql> desc v7;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| id     | int          | NO   |     | 0       |       |
+| name   | varchar(50)  | NO   |     | NULL    |       |
+| income | decimal(7,2) | YES  |     | NULL    |       |
+| comm   | decimal(8,2) | YES  |     | NULL    |       |
+| sal    | decimal(9,2) | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+
+view of employees with limited column + computed column.
+
+_________________________
+Can show whatever we want
+_________________________
+
+mysql> create view view8 as select * from employee where income > 55000;
+
+mysql> select * from view8;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  5 | Mike   | 70000.00 | 7000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 |
++----+--------+----------+---------+
+view of employees with limited data.
+viewed only employees income > 55000.
+
+_____________________________________
+ Not matching condition of the view 
+- ideally it should not be done but esa hi hota he.
+_____________________________________
+
+* I inserted 1 row but it didn't show in view8 because employee income should be > 55000.
+But it gets added in main employee table.
+
+mysql> insert into view8 values(11, 'Kim', 32000.00, 2300);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from view8;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  5 | Mike   | 70000.00 | 7000.00 |
+| 10 | Raina  | 74000.00 | 5400.00 |
+|  8 | Naira  | 80000.00 | 8000.00 |
+|  9 | Shezan | 88000.00 | 6200.00 |
++----+--------+----------+---------+
+
+mysql> select * from employee;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
+|  4 | Jane   | 55000.00 | 4500.00 |
+|  5 | Mike   | 70000.00 | 7000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 |
+|  9 | Shezan | 88000.00 | 6200.00 |
+| 10 | Raina  | 74000.00 | 5400.00 |
+| 11 | Kim    | 32000.00 | 2300.00 |
++----+--------+----------+---------+
+
+__________________
+WITH CHECK OPTION 
+__________________
+
+- works like CHECK CONSTRAINTS.
+
+- checks WHERE clause condition while executing DML operations on views, DML operations are allowed only when condition holds true.
+
+mysql> create view view9 as select * from employee where income > 55000
+WITH CHECK OPTION;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into view9 values(12, 'Leo', 26000.00, 2300);
+ERROR 1369 (HY000): CHECK OPTION failed 'db.view9'
+
+
+__________________________________
+can use joins when creating views
+__________________________________
+
+_____________________________________
+can use subquery when creating views
+_____________________________________
+
+- means can do subquery result with view
+
+* whatever output we get with select query we can create view of it.
+
+
+*If we insert into table then it will add the data into every view you created.
+
+mysql> insert into employee values(9, 'Shezan', 88000, 6200);
+
+
+mysql> select * from v7;
++----+--------+----------+---------+----------+
+| id | name   | income   | comm    | sal      |
++----+--------+----------+---------+----------+
+|  1 | Farah  | 50000.00 | 5000.00 | 55000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 | 66000.00 |
+|  3 | John   | 45000.00 | 4000.00 | 49000.00 |
+|  4 | Jane   | 55000.00 | 4500.00 | 59500.00 |
+|  5 | Mike   | 70000.00 | 7000.00 | 77000.00 |
+|  7 | Tom    | 30000.00 | 3000.00 | 33000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 | 88000.00 |
+|  9 | Shezan | 88000.00 | 6200.00 | 94200.00 |
++----+--------+----------+---------+----------+
+
+* if we change into main table (employee) then it will reflect in view also, because view doesn't have its own memory. View fetches data from main table.
+
+* if if DML operations are performed on main table, they will automatically reflect in the view.
+
+____________________________________________________________________
+
+Changes done in view will be reflected in main table (if possible) 
+- Simple Views 
+____________________________________________________________________
+
+If we perform DML operations on view-
+
+If we insert a row in view, the row is added in that view as well as in the main table (employee) also because view doen't have memory.
+
+mysql> insert into v6 values(10, 'Raina', 74000, 5400);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from v6;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
+|  4 | Jane   | 55000.00 | 4500.00 |
+|  5 | Mike   | 70000.00 | 7000.00 |
+|  7 | Tom    | 30000.00 | 3000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 |
+|  9 | Shezan | 88000.00 | 6200.00 |
+| 10 | Raina  | 74000.00 | 5400.00 |
++----+--------+----------+---------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employee;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
+|  4 | Jane   | 55000.00 | 4500.00 |
+|  5 | Mike   | 70000.00 | 7000.00 |
+|  7 | Tom    | 30000.00 | 3000.00 |
+|  8 | Naira  | 80000.00 | 8000.00 |
+|  9 | Shezan | 88000.00 | 6200.00 |
+| 10 | Raina  | 74000.00 | 5400.00 |
++----+--------+----------+---------+
+
+___________________________________________________________________________
+
+Changes done in view will NOT be reflected in main table (if not possible) 
+- Complex Views 
+___________________________________________________________________________
+
+mysql> select * from v1_incsal;
++--------+--------------+
+| name   | avginc       |
++--------+--------------+
+| Anchal | 60000.000000 |
+| Farah  | 50000.000000 |
+| Jane   | 55000.000000 |
+| John   | 45000.000000 |
+| Mike   | 70000.000000 |
+| Naira  | 80000.000000 |
+| Raina  | 74000.000000 |
+| Shezan | 88000.000000 |
+| Tom    | 30000.000000 |
++--------+--------------+
+9 rows in set (0.00 sec)
+
+* Cann't delete because avginc column is a computed column we made, and it is only in view v1_incsal not in main table.
+
+mysql> delete from v1_incsal where avginc = 60000.000000;
+ERROR 1288 (HY000): The target table v1_incsal of the DELETE is not updatable
+
+* Cann't insert because avginc column is a computed column we made, and it is only in view v1_incsal not in main table.
+
+mysql> insert into v1_incsal values('Rob', 57000.000000);
+ERROR 1471 (HY000): The target table v1_incsal of the INSERT is not insertable-into
+
+________________
+ALTER View- yes
+________________
+
+* It will alter only view not main table structure.
+
+- Cann't add normal columns in view if the column is not in the main table.
+
+* But we can replace a column but can't add.
+* The column which we replaced in view, is not get replaced in the main table. It will be replaced in that view only.
+
+mysql> select * from viewCol;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
++----+--------+----------+---------+
+8 rows in set (0.00 sec)
+
+mysql> create or replace view viewCol as select id, name, income, comm sal from employee;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from viewCol;
++----+--------+----------+---------+
+| id | name   | income   | sal     |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
++----+--------+----------+---------+
+
+
+- Here Employee is still having comm column.
+
+mysql> select * from employee;
++----+--------+----------+---------+
+| id | name   | income   | comm    |
++----+--------+----------+---------+
+|  1 | Farah  | 50000.00 | 5000.00 |
+|  2 | Anchal | 60000.00 | 6000.00 |
+|  3 | John   | 45000.00 | 4000.00 |
++----+--------+----------+---------+
+
+________________________
+Can see VIEW and Tables
+________________________
+
+mysql> show full tables;
++--------------+------------+
+| Tables_in_db | Table_type |
++--------------+------------+
+| employee     | BASE TABLE |
+| prac1        | BASE TABLE |
+| prac2        | BASE TABLE |
+| prac3        | BASE TABLE |
+| prac7        | BASE TABLE |
+| v1_incsal    | VIEW       |
+| v6           | VIEW       |
+| v7           | VIEW       |
+| v8           | VIEW       |
+| view2        | VIEW       |
+| view3        | VIEW       |
+| view4        | VIEW       |
+| view7        | VIEW       |
+| view8        | VIEW       |
+| view9        | VIEW       |
+| viewcol      | VIEW       |
++--------------+------------+
+
+_________________________________________________________________________________
+Can see VIEW - add condition accordingly like in full tables Table_type = 'VIEW'
+_________________________________________________________________________________
+* when we want to see view write as VIEW because here it is case sensitive.
+
+mysql> show full tables where Table_type = 'VIEW';
++--------------+------------+
+| Tables_in_db | Table_type |
++--------------+------------+
+| v1_incsal    | VIEW       |
+| v6           | VIEW       |
+| v7           | VIEW       |
+| v8           | VIEW       |
+| view2        | VIEW       |
+| view3        | VIEW       |
+| view4        | VIEW       |
+| view7        | VIEW       |
+| view8        | VIEW       |
+| view9        | VIEW       |
+| viewcol      | VIEW       |
++--------------+------------+
+
+______________
+Can Drop View
+______________
+
+mysql> Drop view v3;
+
+
+* If we DROP main Table then that Table view will give u error.
+it will still be shown in VIEW if we want to see how many views are there.
+but that view will become useless.
+
+* programmer should delete before deleting table.
+
+mysql> create view View_of_prac3 as select * from prac3;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view_of_prac3;
++--------+------------+------------+--------+
+| name   | dob        | city       | rollno |
++--------+------------+------------+--------+
+| Rahul  | 1995-08-15 | Mumbai     |    101 |
+| Priya  | 2000-01-12 | Delhi      |    102 |
+| Vikram | 1998-07-05 | Bengaluru  |    103 |
++----+--------+----------+---------+--------+
+
+mysql> show full tables where Table_type = 'VIEW';
++---------------+------------+
+| Tables_in_db  | Table_type |
++---------------+------------+
+| v1_incsal     | VIEW       |
+| v3            | VIEW       |
+| view8         | VIEW       |
+| view9         | VIEW       |
+| view_of_prac3 | VIEW       |
+| viewcol       | VIEW       |
++---------------+------------+
+
+mysql> Drop table prac3;
+
+mysql> select * from view_of_prac3;
+ERROR 1356 (HY000): View 'db.view_of_prac3' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them
+
+- Its showing error because no main table is there.
+
+mysql> show full tables where Table_type = 'VIEW';
++---------------+------------+
+| Tables_in_db  | Table_type |
++---------------+------------+
+| v1_incsal     | VIEW       |
+| v3            | VIEW       |
+| view8         | VIEW       |
+| view9         | VIEW       |
+| view_of_prac3 | VIEW       |
+| viewcol       | VIEW       |
++---------------+------------+
+
+I dropped prac3 but still it showing view_of_prac3 view. But this view is useless now.
+
+________________________________
+Can create VIEW on another VIEW
+________________________________
+
+mysql> create view view1 as select * from view2;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view1;
++----+--------+----------+
+| id | name   | income   |
++----+--------+----------+
+|  1 | Farah  | 50000.00 |
+|  2 | Anchal | 60000.00 |
+|  3 | John   | 45000.00 |
+|  4 | Jane   | 55000.00 |
+|  5 | Mike   | 70000.00 |
+|  8 | Naira  | 80000.00 |
+|  9 | Shezan | 88000.00 |
+| 10 | Raina  | 74000.00 |
+| 11 | Kim    | 32000.00 |
++----+--------+----------+
+
+______________________________________________
+To see which view is dependent on which table
+______________________________________________
+
+mysql> SHOW CREATE VIEW view1;
+
+* it will show something like this-
+
+mysql> SHOW CREATE VIEW view1;
+
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+
+| View  | Create View                                                                                                                                                                               | character_set_client | collation_connection |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+
+| view1 | CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view1` AS select `view2`.`id` AS `id`,`view2`.`name` AS `name`,`view2`.`income` AS `income` from `view2` | cp850                | cp850_general_ci     |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+

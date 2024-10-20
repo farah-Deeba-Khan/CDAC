@@ -1,0 +1,231 @@
+Errors
+
+* Deleting table which doesnt exists
+  
+  mysql> drop table departments;
+ERROR 1051 (42S02): Unknown table 'practice.departments'
+
+* Inserting duplicate values in primary key column
+
+mysql> insert into employees values (2,'abc',543000.00, 7,'2019-05-03');
+ERROR 1062 (23000): Duplicate entry '2' for key 'employees.PRIMARY'
+
+
+* 1051,1062 are called error code
+* 45S02,23000 are called sql state
+
+* Exceptions occurs during procedure,function,triggers runtime execution
+
+* We can continue or exit the exccution during handling
+
+Syntax
+
+DECLARE action HANDLER FOR condition_handler_impl;
+
+* action is Continue or Exit
+
+* condition is 
+  mysql error code : 1062 for duplicate entry
+  named condition : DECLARE duplicate_entry Condition for 1062
+  
+* Handler cab be single or multi line inside the begin end block
+
+{
+ create procedure addData(id int,name varchar(10))
+ 
+ begin
+ 
+ insert into etable values (id,name);
+ 
+ select 'succesfully executed' as message;
+ 
+ end $$ }
+ 
+ 
+ 
+ 
+ {
+ create procedure addData(id int,name varchar(10))
+ 
+ begin
+ declare exit handler for 1062 select 'dept add failed' as message
+ 
+ insert into etable values (id,name);
+ 
+ select 'succesfully executed' as message;
+ 
+ end $$ }
+ 
+ 
+ 
+ 
+ {
+ drop procedure if exists addData;
+ 
+ create procedure addData(id int,name varchar(10))
+ 
+ begin
+ declare continue handler for 1062 select 'dept add failed' as message
+ 
+ insert into etable values (id,name);
+ 
+ select 'succesfully executed' as message;
+ 
+ end $$ }
+ 
+ 
+ 
+ 
+ {
+ drop procedure if exists addData;
+ 
+ create procedure addData(id int,name varchar(10))
+ 
+ begin
+ declare errFlag int default 0;
+ 
+ declare continue handler for 1062 set errFlag=1; 
+ 
+ insert into etable values (id,name);
+ 
+ if errFlag=1 then
+ select 'failed' as message;
+ 
+ else
+ select 'success' as message;
+ end if;
+ 
+ end $$ }
+ 
+ 
+ 
+ 
+ 
+ 
+ {
+ drop procedure if exists addData;
+ 
+ create procedure addData(id int,name varchar(10))
+ 
+ begin
+ declare duplicate_entry condition for 1062;
+ 
+ declare errFlag int default 0;
+ 
+ declare continue handler for duplicate_entry set errFlag=1; 
+ 
+ insert into etable values (id,name);
+ 
+ if errFlag=1 then
+ select 'failed' as message;
+ 
+ else
+ select 'success' as message;
+ end if;
+ 
+ end $$ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Cursor
+ 
+ * Used to read records one by one from a select query
+ 
+ * cursor is special variable
+ 
+ * declare curName FOR select_statement;
+ 
+ 
+ * declare error handler for cursor end condition
+ * declare cursor variable and its select statement
+ * open the cursor
+ * fetch values from cursor into local variables(current row) and process them
+ * when all rows are completed, error handler will be executed
+ * end of cursor, close cursor
+ 
+ 
+ DELIMITER $$
+
+CREATE PROCEDURE TransferEmployeeData()
+BEGIN
+    DECLARE vflag INT DEFAULT 0;
+    DECLARE vempid INT;
+    DECLARE vempname VARCHAR(10);
+    DECLARE vdepid INT;
+
+    
+
+    DECLARE vcur CURSOR FOR SELECT emp_id, emp_name, dep_id FROM employees;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET vflag = 1;
+
+    OPEN vcur;
+
+    process_loop: LOOP
+        FETCH vcur INTO vempid, vempname, vdepid;
+
+        IF vflag = 1 THEN
+            LEAVE process_loop;
+        END IF;
+
+        INSERT INTO etable (empid, name) VALUES (vempid, CONCAT(vempname, vdepid));
+    END LOOP;
+
+    CLOSE vcur;
+END $$
+
+DELIMITER ;
+
+ 
+ 
+ SET GLOBAL log_bin_trust_function_creators = 1;
+
+
+CREATE FUNCTION fsq (num INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE sq INT;
+    SET sq = POW(num, 2);
+    RETURN sq;
+END $$
+
+select fsq(10);
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   

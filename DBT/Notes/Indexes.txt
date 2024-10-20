@@ -1,0 +1,85 @@
+--------
+INDEX
+--------
+
+* should not created unnecessary indexes as it takes extra space on server disk.
+* DML operation becomes slower.
+* make index of those columns on which column client can search.
+	Ex- In amazon, a product can be searched with productName so we will make index of productName column.
+		it will search the product fast.
+* join with indexes is faster - if we make index and search using joins then it will faster.
+
+
+Good Practices-
+
+Indexes should be created on shorter (int, char, ....) columns to save disk space.
+_______________
+* Create index
+_______________
+
+create INDEX index_name ON table_name(column_name);
+
+have to create 1 index at a time
+if want to create 8 index then we have to create index 8 times.
+
+there is a composite index also will discuss later.
+
+additional storage- new table of address and that index column.
+
+Searching fast.
+
+Inserting slow.
+
+* select operation - fast
+
+* DML (insert, update, delete) operation - slow
+
+------------------------------------------------
+
+* Indexes are stored in sorted way by default ascending
+* but we can make it descending also.
+	
+	create INDEX index_name ON tableName(columnName desc);
+
+* Blob and text(external storage) - not advisable to create index on Blob and Text.
+
+_______
+TYPES-
+_______
+4 types of Indexes:
+
+1. Single or Regular Index - single column & duplicates allowed.
+
+create INDEX indexName ON tableName(columnName);
+   
+2. Unique Index - duplicate values not allowed. 
+	* if the column has duplicates and we trying to make that column 
+	unique index then when creating unique index it will give error.
+
+create UNIQUE INDEX indexName ON tableName(columnName);
+
+3. Composite Index - can make index of multiple columns(means 2 column or more than columns) at a time. 
+	* in this combination corresponding stored address
+
+create INDEX indexName ON tableName(columnName1, columnName2);
+
+Here if we want to search in both column1 and column2 then it will be faster.
+
+	* we can make Composite Unique Index also-
+ 
+create UNIQUE INDEX indexName ON tableName(columnName1, columnName2);
+	- can also be unique
+	- duplicates combination of columns not allowed.
+	- combination must be unique of columns, it can have same values in 1 column
+
+(not much needed to learn)
+4. Clustered Index - primary index automatically created on primary key for row lookup.
+		- if primary key is not available, hidden index is created.
+
+To see Indexes-
+SHOW INDEXES from tableName;
+
+to delete Indexes-
+DROP INDEX indexName ON tableName;
+
+* when table is dropped, all indexes are automatically dropped.

@@ -1,0 +1,28 @@
+mysql> create procedure sumcal(in num int)
+    -> begin
+    -> declare s int default 1;
+    -> declare sum int default 0;
+    -> while s<=num do
+    -> set sum = sum + s;
+    -> set s = s+1;
+    -> end while;
+    -> select sum as sum;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call sumcal(10)$$
++------+
+| sum  |
++------+
+|   55 |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call sumcal(4)$$
++------+
+| sum  |
++------+
+|   10 |
++------+

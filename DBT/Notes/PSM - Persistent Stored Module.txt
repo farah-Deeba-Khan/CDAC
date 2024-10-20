@@ -1,0 +1,97 @@
+----------------------------------------
+| 18- DBT - Security, PSM - Youtube     |
+|  Time of topic in channel -> 1:00:00  |
+-----------------------------------------
+
+_______________________________
+PSM - Persistent Stored Module
+_______________________________
+
+Inspired from PL/SQL- Programming language of Oracle
+
+
+It is submitted from client, server check the syntax and store them into database in compiled form.
+
+The program can be executed by database user when needed.
+
+
+- End user types program in client machine.
+- Program copied & goes to the server.
+- Server is going to process that.
+- Then database server will compile the program, check the syntax, convert into binary form.
+- And after converting it will store it -
+means after processing the program it is stored in the hard disk.
+- and in server hard Disk it is in a form of compiled program.
+
+- It is submission of program not execution.
+
+Now whenever user do new request for that program
+that program will be loaded from server hard disk to database server in compiled form
+
+and then it gets executed in database server
+
+and if response get generated then it will be send to client machine.
+
+
+2 Points-
+
+* Program Submission
+* Program Execution
+____________________________________________________________________
+
+Stored prodecure is a routine. It contains multiple SQL statements along with programming contructs.
+Procedure doesn't return any value (like void function in C).
+Procedures can take zero or more parameters.
+Procedures are created using create procedure and delete using drop procedure.
+Procedures are invoked/called using call statement.
+Result of stored procedure can be-
+* returned via output parameter.
+* inserted into another table.
+* produced using select statement(end of SP)
+Delimiter should be set before writing SQL query.
+
+______________________________________________________________________
+
+Root user login-
+----------
+| SYNTAX |
+----------
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_hello1()
+BEGIN
+SELECT 'hello world' AS value FROM DUAL;
+END;
+$$
+
+DELIMITER ;
+(Here from dual is optional to write)
+
+CALL sp_hello1();
+____________________________________________________________________
+
+* To Drop Procedure-
+DROP PROCEDURE IF EXISTS sp_hello1;
+
+____________________________________________________________________
+
+insert into hello world into a result table
+create a result table if not created.
+
+CREATE TABLE result(id int, val varchar(10));
+
+
+CREATE PROCEDURE sp_hello2()
+BEGIN
+INSERT INTO result VALUES(1, 'Hello World');
+END;
+$$
+
+DELIMITER ;
+
+----Then------
+
+CALL sp_hello1();
+
+SELECT * FROM result;

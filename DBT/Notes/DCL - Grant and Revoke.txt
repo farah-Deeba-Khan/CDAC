@@ -1,0 +1,252 @@
+When root login
+
+System Databases-
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| company            |
+| db                 |
+| information_schema |
+| mysql              |
+| performance_schema |
+| salesdb            |
+| sys                |
++--------------------+
+
+mysql> use mysql;
+Database changed
+mysql> show tables;
+
+mysql> desc user;
++--------------------------+-----------------------------------+------+-----+-----------------------+-------+
+| Field                    | Type                              | Null | Key | Default               | Extra |
++--------------------------+-----------------------------------+------+-----+-----------------------+-------+
+| Host                     | char(255)                         | NO   | PRI |                       |       |
+| User                     | char(32)                          | NO   | PRI |                       |       |
+
+
+mysql> select user, host from user;
++------------------+-----------+
+| user             | host      |
++------------------+-----------+
+| mysql.infoschema | localhost |
+| mysql.session    | localhost |
+| mysql.sys        | localhost |
+| root             | localhost |
++------------------+-----------+
+4 rows in set (0.00 sec)
+
+
+
+*In root user -
+_____________________
+creating new user % 
+_____________________
+pmgr user created with pmgr password and he can login from any machine in the network.
+
+mysql> create user pmgr@'%' identified by 'pmgr';
+Query OK, 0 rows affected (0.03 sec)
+
+
+* giving all privileges- here, (with grant option) means he can also give privileges to other users.
+
+mysql> grant all privileges on db.* to pmgr@'%' with grant option;
+Query OK, 0 rows affected (0.01 sec)
+
+
+* immediately activate permissions-
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.01 sec)
+
+now we can access this user from another machine. user can see db database.
+
+
+mysql> select user, host from mysql.user;
++------------------+-----------+
+| user             | host      |
++------------------+-----------+
+| pmgr             | %         |
+| mysql.infoschema | localhost |
+| mysql.session    | localhost |
+| mysql.sys        | localhost |
+| root             | localhost |
++------------------+-----------+
+
+
+* Login with user pmgr-
+
+C:\Users\farah>mysql -u pmgr -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+
+Can see root user database whose access pmgr got.
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| db                 |
+| information_schema |
+| performance_schema |
++--------------------+
+
+Can see tables-
+mysql> use db;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_db  |
++---------------+
+| employee      |
+| prac1         |
+| prac2         |
+| prac7         |
+| v1_incsal     |
+| v3            |
+| v6            |
+| v7            |
+| v8            |
+| view1         |
+| view2         |
+| view3         |
+| view4         |
+| view7         |
+| view8         |
+| view9         |
+| view_of_prac3 |
+| viewcol       |
++---------------+
+18 rows in set (0.00 sec)
+
+
+* Again creating 3 users in ROOT user -
+
+here permissions not given to new users.
+
+mysql> create user developer1@'%' identified by 'developer1';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create user developer2@'%' identified by 'developer2';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create user developer3@'%' identified by 'developer3';
+Query OK, 0 rows affected (0.01 sec)
+
+
+* show permissions for current user-
+mysql> show grants;
+
+
+* to see pmgr user permissions-
+
+mysql> show grants for pmgr@'%';
++----------------------------------------------------------------+
+| Grants for pmgr@%                                              |
++----------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `pmgr`@`%`                               |
+| GRANT ALL PRIVILEGES ON `db`.* TO `pmgr`@`%` WITH GRANT OPTION |
++----------------------------------------------------------------+
+
+
+* USAGE ON *.* means - No permissions given -
+mysql> show grants for developer1@'%';
++----------------------------------------+
+| Grants for developer1@%                |
++----------------------------------------+
+| GRANT USAGE ON *.* TO `developer1`@`%` |
++----------------------------------------+
+
+
+
+* Login pmgr user-
+
+C:\Users\farah>mysql -u pmgr -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 28
+
+giving permissions - 
+mysql> grant insert, update, delete, select on db.* to developer1@'%';
+Query OK, 0 rows affected (0.01 sec)
+
+
+
+Cann't give permissions to more than 1 table at a time-
+
+mysql> grant select on db.employee, db.prac1 to developer3@'%';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', db.prac1 to developer3@'%'' at line 1
+
+
+
+Giving permissions 1 by 1 -
+mysql> grant select on db.employee to developer3@'%';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> grant select on db.prac1 to developer3@'%';
+Query OK, 0 rows affected (0.01 sec)
+
+
+
+* Developer3 doesn't have grant option-
+mysql> grant select on db.prac1 to developer1@'%';
+ERROR 1142 (42000): GRANT command denied to user 'developer3'@'localhost' for table 'prac1'
+
+
+
+* Permissions given to developer3 user-
+
+mysql> show grants;
++-----------------------------------------------------+
+| Grants for developer3@%                             |
++-----------------------------------------------------+
+| GRANT USAGE ON *.* TO `developer3`@`%`              |
+| GRANT SELECT ON `db`.`employee` TO `developer3`@`%` |
+| GRANT SELECT ON `db`.`prac1` TO `developer3`@`%`    |
++-----------------------------------------------------+
+
+
+________
+* Note-
+________
+
+pmgr is not allowed to see permissions which he gave on developer1
+
+mysql> show grants for developer1@'%';
+ERROR 1142 (42000): SELECT command denied to user 'pmgr'@'localhost' for table 'user' 
+
+
+So we go in root login to see the permissions on developer1
+
+mysql> show grants for developer1@'%';
++--------------------------------------------------------------------+
+| Grants for developer1@%                                            |
++--------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `developer1`@`%`                             |
+| GRANT SELECT, INSERT, UPDATE, DELETE ON `db`.* TO `developer1`@`%` |
++--------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
+________
+REVOKE
+________
+
+Login in root user -
+
+* Delete permissions are removed on developer1
+
+mysql> revoke delete on db.* from developer1@'%';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show grants for developer1@'%';
++------------------------------------------------------------+
+| Grants for developer1@%                                    |
++------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `developer1`@`%`                     |
+| GRANT SELECT, INSERT, UPDATE ON `db`.* TO `developer1`@`%` |
++------------------------------------------------------------+
+
+This is how we can remove permissions from any user.

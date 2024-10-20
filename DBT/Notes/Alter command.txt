@@ -1,0 +1,119 @@
+mysql> desc employees;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50)  | NO   |     | NULL    |                |
+| salary | decimal(7,2) | YES  |     | NULL    |                |
+| city   | varchar(10)  | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+_______________
+____ALter______
+
+--- Add column ---
+
+mysql> alter table employees add city varchar(10);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++----+--------+----------+------+
+| id | name   | salary   | city |
++----+--------+----------+------+
+|  1 | Farah  | 50000.00 | NULL |
+|  2 | Anchal | 60000.00 | NULL |
+|  3 | John   | 45000.00 | NULL |
+|  4 | Jane   | 55000.00 | NULL |
+|  5 | Mike   | 70000.00 | NULL |
+|  6 | Sara   | 80000.00 | NULL |
+|  7 | Tom    | 30000.00 | NULL |
++----+--------+----------+------+
+7 rows in set (0.00 sec)
+
+
+--- Modify column data type---
+
+mysql> alter table employees modify salary decimal;
+Query OK, 8 rows affected (0.04 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees modify salary decimal(7, 2);
+Query OK, 8 rows affected (0.04 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++----+--------+----------+--------+
+| id | name   | salary   | city   |
++----+--------+----------+--------+
+|  1 | Farah  | 50000.00 | NULL   |
+|  2 | Anchal | 60000.00 | NULL   |
+|  3 | John   | 45000.00 | NULL   |
+|  4 | Jane   | 55000.00 | NULL   |
+|  5 | Mike   | 70000.00 | NULL   |
+|  6 | Sara   | 80000.00 | NULL   |
+|  7 | Tom    | 30000.00 | NULL   |
+|  8 | Naira  | 80000.00 | Mumbai |
++----+--------+----------+--------+
+8 rows in set (0.00 sec)
+
+----------When range is not in between (7,2) -----------
+mysql> insert into employees values(8, 'Kartik', 1050000, 'Delhi');
+ERROR 1264 (22003): Out of range value for column 'salary' at row 1
+
+
+_________________________
+______rename Column______
+
+mysql> alter table employees change salary income decimal(7,2);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employees;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50)  | NO   |     | NULL    |                |
+| income | decimal(7,2) | YES  |     | NULL    |                |
+| city   | varchar(10)  | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+
+_________________________
+______rename Table_______
+
+mysql> alter table employees rename to employee;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++--------------+
+| Tables_in_db |
++--------------+
+| employee     |
++--------------+
+
+
+_________________________
+________Drop Column_______
+
+mysql> alter table employee drop city;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++----+--------+----------+
+| id | name   | income   |
++----+--------+----------+
+|  1 | Farah  | 50000.00 |
+|  2 | Anchal | 60000.00 |
+|  3 | John   | 45000.00 |
+|  4 | Jane   | 55000.00 |
+|  5 | Mike   | 70000.00 |
+|  6 | Sara   | 80000.00 |
+|  7 | Tom    | 30000.00 |
+|  8 | Naira  | 80000.00 |
++----+--------+----------+
+8 rows in set (0.00 sec)

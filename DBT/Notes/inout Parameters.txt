@@ -1,0 +1,19 @@
+mysql> delimiter $$
+mysql> create procedure sq(inout num int)
+    -> begin
+    -> set num = pow(num, 2);
+    -> end $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> set @n = 4 $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call sq(@n)$$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @n as square$$
++--------+
+| square |
++--------+
+|     16 |
++--------+

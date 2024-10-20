@@ -1,0 +1,96 @@
+
+to create procedure change delimeter
+
+use database;
+
+mysql> delimiter $$
+
+mysql> create procedure sqr(in a int)
+-> begin
+-> declare s int;
+-> set s = a*a;
+-> select s as squareArea;
+-> end $$ 
+
+mysql> delimiter ;
+
+mysql> call sqr(4);
+
+
+
+Without parameter-
+
+mysql> delimeter $$
+    $> ^C
+mysql> delimiter $$
+mysql> create procedure p()
+    -> begin
+    -> select * from employee;
+    -> end $$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> call p();
+    -> $$
++------+--------+--------+
+| id   | name   | salary |
++------+--------+--------+
+|    1 | adam   |  25000 |
+|    2 | bob    |  30000 |
+|    3 | casey  |  40000 |
+|    4 | daniel |  50000 |
+|    4 | daniel |  50000 |
++------+--------+--------+
+
+
+
+mysql> delimiter $$
+mysql> create procedure ageCheck(in age int)
+    -> begin
+    -> if age > 18 then
+    -> select 'adult';
+    -> else
+    -> select 'not adult';
+    -> end if;
+    -> end $$
+
+mysql> call ageCheck(20);
+    -> $$
+
++-------+
+| adult |
++-------+
+| adult |
++-------+
+
+mysql> call ageCheck(15);
+    -> $$
+
+
+
+mysql> drop procedure if exists p $$
+
+
+
+input output -
+
+mysql> delimiter $$
+mysql> create procedure cb(inout num int)
+    -> begin
+    -> set num = pow(num,3);
+    -> end $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> set @number = 4 $$
+
+mysql> call cb(@num) $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @num as cubes $$
++-------+
+| cubes |
++-------+
+|    64 |
++-------+
+
+
+

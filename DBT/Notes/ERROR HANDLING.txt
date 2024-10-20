@@ -1,0 +1,43 @@
+ERROR HANDLING -
+
+mysql> delimiter $$
+mysql> create procedure addData(eid int, ename varchar(10))
+    -> begin
+    -> declare eflag int default 0;
+    -> declare duplicate_key condition for 1062;
+    -> declare continue handler for duplicate_key set eflag = 1;
+    -> insert into emp values(eid, ename);
+    -> if eflag = 1 then
+    -> select 'failed' as message;
+    -> else
+    -> select 'added' as message;
+    -> end if;
+    -> end $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call addData(1, 'anchal');
+    -> $$
++---------+
+| message |
++---------+
+| added   |
++---------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from emp $$
++----+--------+
+| id | name   |
++----+--------+
+|  1 | anchal |
++----+--------+
+1 row in set (0.00 sec)
+
+mysql> call addData(1, 'farah')$$
++---------+
+| message |
++---------+
+| failed  |
++---------+
+1 row in set (0.00 sec)
