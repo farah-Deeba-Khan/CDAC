@@ -1,0 +1,76 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.navbar .navbar-nav .nav-item {
+    position: relative;
+}
+
+.navbar .navbar-nav .nav-item::after
+{
+    position: absolute;
+    botton: 0;
+    left: 0;
+    right: 0;
+
+}
+
+body
+{
+overflow-x: hidden;
+}
+
+h1
+{
+    font-family: "Dancing Script", cursive;
+}
+
+.carousel-item img
+{
+    width: 100%;
+    height: 80vh;
+}
+
+.cover
+{
+    width: 100%;
+    height: auto;
+}
+
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.text-mid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h4 {
+text-align: center;
+}
+
+.card:hover
+{
+transform: scale(1.1);
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 255, 0, 0.2);
+    transition: transform 0.5s;
+}
+
+.foot {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
