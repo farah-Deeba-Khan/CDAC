@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        a = 5;
+        b = 4;
+        c = a+b;
+        console.log("Sum is "+c);
+        console.log("Sum is "+a+b); // concatenate
+        console.log("Sum is "+(a+b));
+
+        console.log("Sum of "+a+" and "+b+" is " +c);  // to ease this we use improved string literal
+
+        // improved string literal
+        console.log(`Sum of ${a} and ${b} is ${c}`);
+        d = `Sum of ${a} and ${b} is ${c}`;
+        console.log(d);
+
+
+        // console.log("2" == 2); // true -> converting string into number
+        // console.log("abc" == 2); // false -> abc is character string cann't converted into number
+        
+        console.log("2" === "2"); //true
+        console.log("abc" === "abc"); // true
+        console.log("abc" === "fdr"); //false
+        console.log("abc" === "2"); // false
+        console.log("2" === 2); // false checking types string and number is not equal
+        console.log("abc" === 2); // false
+
+        console.log("abc" + 2); //abc2
+        console.log("abc" - 2); //NAN
+        console.log("5"+2); // 52 Concatenation
+        console.log("7"-3); // converting string into number and substracting
+
+        console.log("4"+1-6*2); // 41-12 = 29 // here concatenation is done first
+        console.log("4"-1-6*2); //3-12 = -9
+        
+        //Arithmetic Operator
+        console.log(5**3); // power calculate -> 5^3 = 125
+
+        // Ladder if
+        roll = 122;
+        if(roll == 101)
+        {
+            console.log("NO");
+        }
+        if(roll==103)
+        {
+            console.log("No");
+        }
+        else if(roll==122)
+        {
+            console.log("Yes");
+        }
+
+
+        // Nested if
+        roll2 = 144;
+        if(roll2 == 101)
+        {
+            console.log("NO");
+        
+            if(roll2==103)
+            {
+                console.log("No");
+            }
+        }
+        else {
+            console.log("NO");
+        }
+
+        // for loop
+        for(i = 3; i <= 5; i++)
+        {
+            console.log("Hello"); 
+        }
+
+
+        // Array
+        arr = [2,5,7,'hi',8.3, "far", ''];
+        console.log(arr);
+        console.log(arr[3]); // hi
+        console.log(arr[6]); // blank
+        console.log(arr[10]); // undefined
+    </script>
+</body>
+</html>
